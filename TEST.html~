@@ -1,0 +1,104 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<script src="jquery-1.10.1.min.js"></script>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta http-equiv="content-language" content="en" />
+<title>Aquarium Simulation "Touch the Fish"</title>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(window).load(function(){
+		var documentWidth=$(document).width();
+		var documentHeight=$(document).height();
+		var tankWidth=$('#fishTank').width();
+		var tankHeight=$('#fishTank').height();
+		$('#fishTank').css('left',+((documentWidth/2)-(tankWidth/2))+'px');
+		$('#fishTank').css('top',+((documentHeight/2)-(tankHeight/2))+'px');
+	});
+	$(window).resize(function(){
+		var documentWidth=$(document).width();
+		var documentHeight=$(document).height();
+		var tankWidth=$('#fishTank').width();
+		var tankHeight=$('#fishTank').height();
+		$('#fishTank').css('left',+((documentWidth/2)-(tankWidth/2))+'px');
+		$('#fishTank').css('top',+((documentHeight/2)-(tankHeight/2))+'px');
+	});
+});
+</script>
+<style type="text/css">
+body {
+overflow: hidden;
+background:url('1.jpg');
+}
+#fishTank {
+position: absolute;
+border: 1px #000000 solid;
+width: 600px;
+height: 480px;
+left: 20px;
+top: 20px;
+background-image: url(tankBG.jpg);
+overflow: hidden;
+}
+img {
+position: absolute;
+}
+</style>
+<script type="text/javascript">
+function Fish(ownName) {
+this.fishType = Math.round(Math.random() * 7) + 1; // choose fish type (1-8)
+this.positionX = Math.round(Math.random() * 530); // choose random start X co-ordinate
+this.positionY = Math.round(Math.random() * 425); // choose random start Y co-ordinate
+while (!(this.directionX = Math.round(Math.random() * 2) - 1)); // choose random X direction (left or right)
+while (!(this.directionY = Math.round(Math.random() * 2) - 1)); // choose random Y direction (up or down)
+ document.getElementById('fishTank').appendChild(this.canvas = document.createElement('img'));
+this.canvas.style.left = this.positionX + 'px';
+ this.canvas.style.top = this.positionY + 'px';
+
+setInterval('window[\'' + ownName + '\'].animate();', (Math.round(Math.random() * 4) + 3) * 10); // choose random speed (20, 30, 40, 50, 60)
+ }
+Fish.prototype.animate = FishAnimate;
+function FishAnimate() {
+ if ((newImageName = 'fish' + this.fishType + (this.directionX > 0 ? '_flipped' : '') + '.gif') != this.canvas.src.substr(this.canvas.src.lastIndexOf('/') + 1)) this.canvas.src = newImageName;
+this.canvas.className='test';
+ xPos = parseInt(this.canvas.style.left, 10) + this.directionX;
+ yPos = parseInt(this.canvas.style.top, 10) + this.directionY;
+ if (xPos > 610 || Math.round(Math.random() * 200) > 199) this.directionX = 0-(Math.round(Math.random()) + 1);
+ if (xPos < -75 || Math.round(Math.random() * 200) > 199) this.directionX = Math.round(Math.random()) + 1;
+ if (yPos > 390 || Math.round(Math.random() * 200) > 199) this.directionY = -1;
+ if (yPos < 10 || Math.round(Math.random() * 200) > 199) this.directionY = 1;
+this.canvas.style.left = xPos + 'px';
+ this.canvas.style.top = yPos + 'px';
+ }
+ function createFish() {
+	var fishNumbers=parseInt(prompt("please Enter the Number of Fish","15"));
+	for (var loop=0; loop<fishNumbers; loop++) window['fish' + loop] = new Fish('fish' + loop);
+ }
+</script>
+</head>
+<body onload="createFish();">
+<p align="center"><img  id="fish" src=""/></p>
+<div id="fishTank"></div>
+</body>
+<script type="text/javascript">
+$('#fishTank').on('click', '.test', function(){
+    var randLeft=Math.round(Math.random() * 100) + 1;
+    var randTop=Math.round(Math.random() * 100) + 1;
+    var UpOrDown=Math.round(Math.random());
+    if(UpOrDown>0){
+	    $(this).css('top','+='+randLeft+'px' );
+	    $(this).css('left','+='+randTop+'px' );
+	    var src=$(this).attr('src');
+	    $('#fish').attr('src',src);
+    	}
+    else{
+	    $(this).css('top','-='+randLeft+'px' );
+	    $(this).css('left','-='+randTop+'px' );
+	    var src=$(this).attr('src');
+	    $('#fish').attr('src',src);
+  }
+});
+</script>
+</html>
+
